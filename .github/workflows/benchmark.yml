@@ -29,10 +29,10 @@ jobs:
 
           python3 -m pip install -qqq setuptools_scm > /dev/null 2>&1
 
-          export IMAGE_TAG = $(python3 -m setuptools_scm)
-          export MAJOR_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f1)
-          export MINOR_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f2)
-          export PATCH_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f3)
+          export IMAGE_TAG=$(python3 -m setuptools_scm)
+          export MAJOR_VERSION=$(echo ${IMAGE_TAG} | cut -d '.' -f1)
+          export MINOR_VERSION=$(echo ${IMAGE_TAG} | cut -d '.' -f2)
+          export PATCH_VERSION=$(echo ${IMAGE_TAG} | cut -d '.' -f3)
 
           docker buildx build \
             --build-arg LOCALSTACK_PRE_RELEASE=0 \
@@ -64,10 +64,10 @@ jobs:
 
           python3 -m pip install -qqq setuptools_scm > /dev/null 2>&1
 
-          export IMAGE_TAG = $(python3 -m setuptools_scm)
-          export MAJOR_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f1)
-          export MINOR_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f2)
-          export PATCH_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f3)
+          export IMAGE_TAG=$(python3 -m setuptools_scm)
+          export MAJOR_VERSION=$(echo ${IMAGE_TAG} | cut -d '.' -f1)
+          export MINOR_VERSION=$(echo ${IMAGE_TAG} | cut -d '.' -f2)
+          export PATCH_VERSION=$(echo ${IMAGE_TAG} | cut -d '.' -f3)
 
           # Based on `make docker-build` but use default build cache (in remote builder)
           docker buildx build \
