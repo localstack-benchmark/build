@@ -27,10 +27,13 @@ jobs:
           # Ensure exclusive cache access for apt and pip
           sed -i 's/--mount=type=cache/--mount=type=cache,sharing=locked/g' ./Dockerfile
 
-          # # Skip --load for fairness with Namespace build.
-          export DOCKER_BUILD_FLAGS=""
-
-          make docker-build
+          docker buildx build \
+            --build-arg LOCALSTACK_PRE_RELEASE=0 \
+            --build-arg LOCALSTACK_BUILD_GIT_HASH=$(git rev-parse --short HEAD) \
+            --build-arg=LOCALSTACK_BUILD_DATE=$(date -u +"%Y-%m-%d") \
+            --build-arg=LOCALSTACK_BUILD_VERSION=$(python3 -m setuptools_scm) \
+            --add-host="localhost.localdomain:127.0.0.1" \
+            -t localstack/localstack:latest . -f ./Dockerfile
 
   nsc-build:
     name: Build with Namespace
