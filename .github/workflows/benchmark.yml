@@ -69,6 +69,8 @@ jobs:
           export MINOR_VERSION=$(echo ${IMAGE_TAG} | cut -d '.' -f2)
           export PATCH_VERSION=$(echo ${IMAGE_TAG} | cut -d '.' -f3)
 
+          docker buildx ls
+
           # Based on `make docker-build` but use default build cache (in remote builder)
           docker buildx build \
             --build-arg LOCALSTACK_PRE_RELEASE=0 \
