@@ -28,13 +28,17 @@ jobs:
           sed -i 's/--mount=type=cache/--mount=type=cache,sharing=locked/g' ./Dockerfile
 
           python3 -m pip install -qqq setuptools_scm > /dev/null 2>&1
-          python3 -m setuptools_scm
+
+          export IMAGE_TAG = $(python3 -m setuptools_scm)
+          export MAJOR_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f1)
+          export MINOR_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f2)
+          export PATCH_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f3)
 
           docker buildx build \
             --build-arg LOCALSTACK_PRE_RELEASE=0 \
             --build-arg LOCALSTACK_BUILD_GIT_HASH=$(git rev-parse --short HEAD) \
             --build-arg=LOCALSTACK_BUILD_DATE=$(date -u +"%Y-%m-%d") \
-            --build-arg=LOCALSTACK_BUILD_VERSION=$(python3 -m setuptools_scm) \
+            --build-arg=LOCALSTACK_BUILD_VERSION=$IMAGE_TAG \
             --add-host="localhost.localdomain:127.0.0.1" \
             -t localstack/localstack:latest . -f ./Dockerfile
 
@@ -59,14 +63,18 @@ jobs:
           sed -i 's/--mount=type=cache/--mount=type=cache,sharing=locked/g' ./Dockerfile
 
           python3 -m pip install -qqq setuptools_scm > /dev/null 2>&1
-          python3 -m setuptools_scm
+
+          export IMAGE_TAG = $(python3 -m setuptools_scm)
+          export MAJOR_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f1)
+          export MINOR_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f2)
+          export PATCH_VERSION = $(echo ${IMAGE_TAG} | cut -d '.' -f3)
 
           # Based on `make docker-build` but use default build cache (in remote builder)
           docker buildx build \
             --build-arg LOCALSTACK_PRE_RELEASE=0 \
             --build-arg LOCALSTACK_BUILD_GIT_HASH=$(git rev-parse --short HEAD) \
             --build-arg=LOCALSTACK_BUILD_DATE=$(date -u +"%Y-%m-%d") \
-            --build-arg=LOCALSTACK_BUILD_VERSION=$(python3 -m setuptools_scm) \
+            --build-arg=LOCALSTACK_BUILD_VERSION=$IMAGE_TAG \
             --add-host="localhost.localdomain:127.0.0.1" \
             -t localstack/localstack:latest . -f ./Dockerfile
 
